@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Template originator   = "Sébastien Nicouleaud"
+          language     = "R"
+          created      = "06/17/2006"
+          lastModified = "06/17/2006">
+	<TemplateConfiguration>
+		<_Name>Empty File</_Name>
+		<Category>General</Category>
+		<LanguageName>R</LanguageName>
+		<_Description>Creates an empty R file.</_Description>
+	</TemplateConfiguration>
+	<TemplateFiles>
+		<File DefaultExtension = ".R"
+		      DefaultName      = "EmptyFile">
+			<![CDATA[# Created on ${Date} at ${Time}]]>
+		</File>
+	</TemplateFiles>
+	<FileOptions/>
+</Template>

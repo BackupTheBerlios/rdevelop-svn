@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<AddIn id          = "RDevelop.RBinding"
+       name        = "RDevelop.RBinding"
+       version     = "0.1"
+       author      = "Sébastien Nicouleaud"
+       copyright   = "GPL"
+       url         = "http://rdevelop.berlios.de/"
+       description = "R support for MonoDevelop."
+       category    = "Language bindings">
+	<Runtime>
+		<Import assembly = "RDevelop.RBinding.dll"/>
+	</Runtime>
+	<Extension path = "/SharpDevelop/Workbench/FileFilter">
+		<FileFilter id           = "RFileFilter"
+		            insertbefore = "AllFiles"
+						_label       = "R files (*.R)"
+		            extensions   = "*.R"/>
+	</Extension>
+	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
+		<ProjectBinding id    = "RProject"
+		                class = "RDevelop.RBinding.RProjectBinding"/>
+	</Extension>
+	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
+		<LanguageBinding id                  = "R"
+		                 supportedextensions = ".R"
+		                 class               = "RDevelop.RBinding.RLanguageBinding"/>
+	</Extension>
+	<Extension path = "/MonoDevelop/FileTemplates">
+		<FileTemplate id       = "EmptyRFile"
+		              resource = "EmptyRFile.xft.xml"/>
+	</Extension>
+	<Extension path = "/MonoDevelop/ProjectTemplates">
+		<ProjectTemplate id       = "EmptyRProject"
+		                 resource = "EmptyRProject.xpt.xml"/>
+	</Extension>
+</AddIn>
