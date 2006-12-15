@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<AddIn id          = "RDevelop.RConsole"
+       name        = "RDevelop.RConsole"
+       version     = "0.1"
+       author      = "Sébastien Nicouleaud"
+       copyright   = "GPL"
+       url         = "http://rdevelop.sf.net/"
+       description = "Integrated R console for MonoDevelop."
+       category    = "IDE extensions">
+	<Runtime>
+		<Import assembly = "RDevelop.RConsole.dll"/>
+	</Runtime>
+	<Extension path = "/SharpDevelop/Workbench/Pads">
+		<Pad id               = "RDevelop.RConsole.RConsolePad"
+		     class            = "RDevelop.RConsole.RConsolePad"
+		     defaultPlacement = "Bottom"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/Contexts/Edit">
+		<ContextPad id = "RDevelop.RConsole.RConsolePad"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Commands">
+		<Command id             = "RDevelop.RConsole.Commands.Commands.RunSelectionInRConsole"
+		         defaultHandler = "RDevelop.RConsole.Commands.RunSelectionInRConsoleHandler"
+		         _label         = "Run selection in R console"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/ViewContent/DefaultTextEditor/ContextMenu">
+		<CommandItem id = "RDevelop.RConsole.Commands.Commands.RunSelectionInRConsole"/>
+	</Extension>
+</AddIn>
