@@ -1,0 +1,17 @@
+Source: <package>
+Section: misc
+Priority: extra
+Maintainer: <maintainer> <<email>>
+Build-Depends:
+Standards-Version: 3.7.2
+
+Package: <package>
+Architecture: all
+Depends: shared-mime-info
+Description: RDevelop R MIME-info support
+ RDevelop (http://rdevelop.berlios.de/) is a set of MonoDevelop
+ (http://www.monodevelop.org/) add-ins providing support for the
+ GNU R statistical computing environment (http://www.r-project.org).
+ .
+ This package provides missing R MIME-info files to enable R
+ syntax-highlighting.

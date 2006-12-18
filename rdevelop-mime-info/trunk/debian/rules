@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+
+package = <package>
+
+SRCTOP           := $(shell if [ "$$PWD" != "" ]; then echo $$PWD; else pwd; fi)
+DESTDIR           = $(SRCTOP)/debian/$(package)
+MIME_PACKAGES_DIR = $(DESTDIR)/usr/share/mime/packages
+DOCS_DIR          = $(DESTDIR)/usr/share/doc/$(package)
+
+INST_OWN    = -o root -g root
+MAKE_DIR    = install -p -d $(INST_OWN) -m 755
+INST_FILE   = install -c $(INST_OWN) -m 644
+INST_SCRIPT = install -c  $(INST_OWN) -m 755
+
+build:
+
+binary: binary-arch binary-indep
+
+binary-arch: build
+
+binary-indep: build
+	$(MAKE_DIR) "$(MIME_PACKAGES_DIR)"
+	$(INST_FILE) rdevelop.xml "$(MIME_PACKAGES_DIR)"
+	$(MAKE_DIR) "$(DOCS_DIR)"
+	$(INST_FILE) debian/copyright "$(DOCS_DIR)/copyright"
+	$(INST_FILE) debian/changelog "$(DOCS_DIR)/changelog.Debian"
+	$(INST_FILE) README.txt "$(DOCS_DIR)/README"
+	$(MAKE_DIR) "$(DESTDIR)/DEBIAN"
+	$(INST_SCRIPT) debian/postinst "$(DESTDIR)/DEBIAN"
+	$(INST_SCRIPT) debian/postrm "$(DESTDIR)/DEBIAN"
+	gzip -9 "$(DOCS_DIR)/changelog.Debian"
+	dpkg-gencontrol -P"$(DESTDIR)"
+	cd "$(DESTDIR)" && find . -type f ! -regex '.*DEBIAN/.*' -printf '%P\0' | xargs -r0 md5sum > DEBIAN/md5sums
+	dpkg-deb -b "$(DESTDIR)" ../
+
+clean:
+	-rm -rf debian/$(package)
+
+.PHONY: binary binary-arch binary-indep clean build

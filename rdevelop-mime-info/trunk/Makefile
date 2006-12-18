@@ -1,20 +1,46 @@
-PREFIX=/usr/local
-MIME_DIR=$(PREFIX)/share/mime
-MIME_PKG_DIR=$(MIME_DIR)/packages
-MIME_FILE=rdevelop.xml
+PACKAGE    = rdevelop-mime-info
+VERSION    = 0.`svnversion | sed 's/[a-zA-Z]//'`
+MAINTAINER = Sebastien Nicouleaud
+EMAIL      = sebastien.nicouleaud@gmail.com
+DATE       = `date -R`
 
-UPDATE_MIME_DATABASE=update-mime-database
-RM=rm -f
-INSTALL=install
+BUILDDIR    = build
+PKGFULLNAME = $(PACKAGE)-$(VERSION)
+PKGBUILDDIR = $(BUILDDIR)/$(PKGFULLNAME)
+ORIGTGZ     = $(BUILDDIR)/$(PACKAGE)_$(VERSION).orig.tar.gz
+DEB         = $(BUILDDIR)/$(PACKAGE)-$(VERSION).deb
+
+SED_SCRIPT = "s/<package>/$(PACKAGE)/g;\
+s/<version>/$(VERSION)/g;\
+s/<maintainer>/$(MAINTAINER)/g;\
+s/<email>/$(EMAIL)/g;\
+s/<date and time>/$(DATE)/g"
+
+DEBFILES = `ls debian`
+
+SOURCES = rdevelop.xml README.txt
 
 all:
-	@echo 'Run "make install".'
+	install -d $(PKGBUILDDIR)/debian
+	install $(SOURCES) $(PKGBUILDDIR)
+	tar -C $(BUILDDIR) -czf $(ORIGTGZ) $(PKGFULLNAME)
+	for debfile in $(DEBFILES); do sed -e $(SED_SCRIPT) debian/$${debfile} > $(PKGBUILDDIR)/debian/$${debfile}; done
+	chmod +x $(PKGBUILDDIR)/debian/rules
+	cd $(PKGBUILDDIR) && debuild -us -uc
 
-install:
-	$(INSTALL) -d $(MIME_PKG_DIR)
-	$(INSTALL) $(MIME_FILE) $(MIME_PKG_DIR)
-	$(UPDATE_MIME_DATABASE) $(MIME_DIR)
+clean:
+	rm -fR $(BUILDDIR)
 
-uninstall:
-	$(RM) $(MIME_FILE)
+LOCALREP    = $(BUILDDIR)/repository
+REMOTEREP   = shell.berlios.de:/home/groups/ftp/pub/rdevelop/debian
+RSYNC       = rsync
+RSYNC_FLAGS = -aze ssh
+
+upload:
+	install -d $(LOCALREP)
+	$(RSYNC) $(RSYNC_FLAGS) $(REMOTEREP)/ $(LOCALREP)/
+	cd $(LOCALREP) && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+	cd $(LOCALREP) && dpkg-scansources . /dev/null | gzip -9c > Sources.gz
+	cp -f $(BUILDDIR)/*.deb $(BUILDDIR)/*.gz $(BUILDDIR)/*.dsc $(LOCALREP)
+	$(RSYNC) $(RSYNC_FLAGS) --delete --force $(LOCALREP)/ $(REMOTEREP)/
 
