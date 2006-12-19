@@ -1,5 +1,5 @@
 PACKAGE    = rdevelop-mime-info
-VERSION    = 0.`svnversion | sed 's/[a-zA-Z]//'`
+VERSION    = 0.`svnversion | cut -d: -f1 | sed 's/[a-zA-Z]//'`
 MAINTAINER = Sebastien Nicouleaud
 EMAIL      = sebastien.nicouleaud@gmail.com
 DATE       = `date -R`
